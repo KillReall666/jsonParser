@@ -1,0 +1,68 @@
+basePath: /
+definitions:
+  model.PortData:
+    properties:
+      alias:
+        items:
+          type: string
+        type: array
+      city:
+        type: string
+      code:
+        type: string
+      coordinates:
+        items:
+          type: number
+        type: array
+      country:
+        type: string
+      name:
+        type: string
+      province:
+        type: string
+      regions:
+        items:
+          type: string
+        type: array
+      timezone:
+        type: string
+      unlocs:
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: codewarrior666@mail.ru
+    name: API Support
+    url: http:///evil.com
+  description: API server for parsing json files that store information about ports.
+  termsOfService: http://evil.com
+  title: JSONParser App API
+  version: "1.0"
+paths:
+  /update:
+    post:
+      consumes:
+      - application/json
+      description: Update information about ports in in-memory storage
+      parameters:
+      - description: port data
+        in: body
+        name: Input
+        required: true
+        schema:
+          $ref: '#/definitions/model.PortData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema: {}
+      summary: Update
+swagger: "2.0"
