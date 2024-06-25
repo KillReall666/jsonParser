@@ -64,4 +64,5 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Data updated successfully"))
 		return
 	}
+
 }

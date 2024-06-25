@@ -2,14 +2,13 @@ package storage
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 
 	"KillReall666/jsonParser.git/internal/config"
 	"KillReall666/jsonParser.git/internal/model"
-
-	jsoniter "github.com/json-iterator/go"
 )
 
 type Storage struct {
@@ -32,17 +31,30 @@ func (s *Storage) LoadDataFromFile() error {
 	defer file.Close()
 
 	reader := bufio.NewReader(file)
-	decoder := jsoniter.NewDecoder(reader)
 
-	for {
-		if err = decoder.Decode(&s.repo); err != nil {
-			if err.Error() == "EOF" {
-				break
-			}
-			log.Fatalf("decode err when load data from file: %v", err)
+	decoder := json.NewDecoder(reader)
+
+	for decoder.More() {
+		token, err := decoder.Token()
+		if err != nil {
+			log.Println("error reading token:", err)
+			break
 		}
-	}
 
+		key, ok := token.(string)
+		if !ok {
+			continue // Skip token if not a string
+		}
+
+		var portData model.PortData
+		err = decoder.Decode(&portData)
+		if err != nil {
+			log.Println("error decoding portDData:", err)
+			break
+		}
+
+		s.repo[key] = portData
+	}
 	return nil
 }
 
